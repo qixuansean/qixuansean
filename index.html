@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sean Qi Xuan — Independent Developer</title>
+  <meta name="description" content="Sean Qi Xuan — independent developer and system architect. Rust, Python, AI automation and modern frontend. Transparent pricing at 80% of market rate.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Kill browser scroll restoration before anything else paints. -->
+  <script>history.scrollRestoration = "manual";</script>
+</head>
+<body>
+
+  <!-- Custom Awwwards Interactive Cursor -->
+  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+  <!-- Decorative layers -->
+  <div class="grid-lines" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i>
+  </div>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- Capsule navigation -->
+  <nav class="nav" aria-label="Section navigation">
+    <div class="capsule">
+      <button class="node" data-target="hero" aria-label="Home">I</button>
+      <button class="node" data-target="student" aria-label="Students">III</button>
+      <button class="node" data-target="archive" aria-label="Archive">V</button>
+      <button class="node" data-target="pricing" aria-label="Pricing">VII</button>
+      <button class="node" data-target="contact" aria-label="Contact">XIII</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button id="lang" class="mono lang" aria-label="Toggle language">EN / 中</button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- 01 · HERO -->
+    <section class="chapter hero" id="hero">
+      <div class="hero-top mono">
+        <span>SEAN QIXUAN</span>
+        <span>PORTFOLIO / 2026</span>
+      </div>
+
+      <div class="morph" id="morph" data-front="SEAN QIXUAN" data-back="SYSTEM ARCHITECT 0919"></div>
+
+      <div class="hero-bottom">
+        <p class="mono" data-i18n="hero-role">INDEPENDENT DEVELOPER — MALAYSIA / UTC+8</p>
+        <p class="mono hint"><span data-i18n="hero-hint">SCROLL</span> <span class="arrow">↓</span></p>
+      </div>
+    </section>
+
+    <!-- 02 · MANIFESTO -->
+    <section class="chapter statement-chapter" id="manifesto">
+      <span class="idx mono">02 / 13 — MANIFESTO</span>
+      <h2 class="statement" id="statement" data-split data-i18n="statement">Precision is not a feature. It is the baseline.</h2>
+      <p class="panel">Every detail has a purpose, every decision has intention, and every element works toward something greater.</p>
+    </section>
+
+    <!-- 03 · STUDENT COLUMN -->
+    <section class="chapter" id="student">
+      <header class="chapter-head">
+        <span class="idx mono">03 / 13 — STUDENTS</span>
+        <h2 class="section-title" data-flip data-i18n="student-title">FOR STUDENTS</h2>
+        <p class="lede" data-i18n="student-lede">Tools that remove the boring parts of university, so the work you keep is the work that matters.</p>
+      </header>
+
+      <div class="bento">
+        <article class="tile tile--wide">
+          <span class="tile-num mono">01</span>
+          <h3 data-i18n="stu1-t">Academic toolkit</h3>
+          <p data-i18n="stu1-d">Coursework templates, citation cleanup and formatting pipelines that turn a messy draft into a submittable paper.</p>
+        </article>
+        <article class="tile">
+          <span class="tile-num mono">02</span>
+          <h3 data-i18n="stu2-t">Campus auto-login</h3>
+          <p data-i18n="stu2-d">A quiet daemon that re-authenticates your campus network after sleep, without touching your password.</p>
+        </article>
+        <article class="tile">
+          <span class="tile-num mono">03</span>
+          <h3 data-i18n="stu3-t">LaTeX &amp; papers</h3>
+          <p data-i18n="stu3-d">IEEE and ACM templates, reference checks, and a clean build every single time.</p>
+        </article>
+        <article class="tile tile--wide tile--dark">
+          <span class="tile-num mono">04</span>
+          <h3 data-i18n="stu4-t">Student rate</h3>
+          <p data-i18n="stu4-d">Same engineering standard, 80% of market rate. Student bundles start at $40 with source code included.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 04 · STACK -->
+    <section class="chapter stack-chapter" id="stack">
+      <span class="idx mono">04 / 13 — STACK</span>
+      <div class="marquee"><div class="marquee-track">RUST · PYTHON · TOKIO · AIRFLOW · CLICKHOUSE · NEXT.JS · GSAP ·&nbsp;</div></div>
+      <div class="marquee marquee--reverse"><div class="marquee-track">SYSTEMS · P2P · SCRAPING · AI AGENTS · DESIGN SYSTEMS ·&nbsp;</div></div>
+    </section>
+
+    <!-- 05 · ARCHIVE (horizontal) -->
+    <section class="chapter archive" id="archive">
+      <div class="archive-head mono">
+        <span>05 / 13 — SELECTED WORK</span>
+        <span class="archive-progress" aria-hidden="true"><i></i></span>
+      </div>
+      <div class="archive-viewport">
+        <div class="archive-track">
+          <article class="panel">
+            <span class="panel-num mono">01</span>
+            <img src = "assests/solera.png" class="panel-visual"/>
+            <h3 data-i18n="p1t">01 — SOLÉRA</h3>
+            <p class="mono">TYPESCRIPT · VITE · FRONTEND ENGINEERING</p>
+            <p class="panel-desc" data-i18n="p1d">An interactive travel platform featuring dynamic destination discovery, advanced filtering, saved journeys, immersive galleries, and location-based solar calculations.</p>
+          </article>
+          <article class="panel">
+            <span class="panel-num mono">02</span>
+            <img src = "assests/qorvyn.png" class="panel-visual"/>
+            <h3 data-i18n="p2t">02 — QORVYN</h3>
+            <p class="mono">PYTHON · FLASK · SQLITE · JAVASCRIPT</p>
+            <p class="panel-desc" data-i18n="p2d">A community platform built to connect people through knowledge and conversation.</p>
+          </article>
+          <article class="panel">
+            <span class="panel-num mono">03</span>
+            <img src = "assests/swim.png" class="panel-visual"/>
+            <h3 data-i18n="p3t">03 — SWIMFLOW</h3>
+            <p class="mono">NEXT.JS · TYPESCRIPT · POSTGRESQL · PRISMA</p>
+            <p class="panel-desc" data-i18n="p3d">A smarter approach to structured learning and student progression.</p>
+          </article>
+          <article class="panel panel--cta">
+            <span class="panel-num mono">04</span>
+            <h3 class="outline">YOURS<br>NEXT.</h3>
+            <a class="link-arrow mono" href="#contact" data-i18n="archive-cta">START A PROJECT →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 · TRANSITION -->
+    <section class="chapter statement-chapter" id="depth">
+      <span class="idx mono">06 / 13 — DEPTH</span>
+      <h2 class="statement" data-split data-i18n="depth">Depth over Decoration, Ideas over Imitation, and Creation without Limits.</h2>
+    </section>
+
+    <!-- 07 · PRICING -->
+    <section class="chapter" id="pricing">
+      <header class="chapter-head">
+        <span class="idx mono">07 / 13 — PRICING</span>
+        <h2 class="section-title" data-flip data-i18n="pricing-title">80% OF MARKET</h2>
+        <p class="lede" data-i18n="pricing-lede">No agency markup, no account managers. You pay for engineering time, and you keep the source code.</p>
+      </header>
+
+      <div class="pricing-container">
+        <!-- 老板专属区 -->
+        <div class="pricing-category mono" data-i18n="pricing-biz-tag">[ FOR BUSINESS / 商业接单 ]</div>
+        <div class="pricing-table">
+          <div class="pricing-line">
+            <div class="pricing-num mono">01.</div>
+            <div class="pricing-info">
+              <h3 class="pricing-name" data-i18n="price1-name">SIMPLE TASKS & SCRIPTS</h3>
+              <p class="pricing-desc" data-i18n-html="price1-desc">CLI tools, basic web scrapers, and workflow automation. <b class="accent-text">Saves 90% manual time.</b></p>
+            </div>
+            <div class="pricing-price mono" data-i18n="price1-price">[ START: $20 ]</div>
+          </div>
+          <div class="pricing-line">
+            <div class="pricing-num mono">02.</div>
+            <div class="pricing-info">
+              <h3 class="pricing-name" data-i18n="price2-name">MEDIUM PIPELINES & APPS</h3>
+              <p class="pricing-desc" data-i18n-html="price2-desc">Complex ETL pipelines, full-stack web apps, and API integrations. <b class="accent-text">Saves 80% dev time.</b></p>
+            </div>
+            <div class="pricing-price mono" data-i18n="price2-price">[ START: $80 ]</div>
+          </div>
+          <div class="pricing-line">
+            <div class="pricing-num mono">03.</div>
+            <div class="pricing-info">
+              <h3 class="pricing-name" data-i18n="price3-name">COMPLEX SYSTEMS & AUDITS</h3>
+              <p class="pricing-desc" data-i18n-html="price3-desc">Rust P2P networks, security audits, and high-concurrency backends. <b class="accent-text">Saves 65% enterprise costs.</b></p>
+            </div>
+            <div class="pricing-price mono" data-i18n="price3-price">[ START: $250 ]</div>
+          </div>
+        </div>
+
+        <!-- 学生专属区 -->
+        <div class="pricing-category mono" style="margin-top: 3rem;" data-i18n="pricing-stu-tag">[ FOR STUDENTS / 学生特惠 ]</div>
+        <div class="pricing-table">
+          <div class="pricing-line">
+            <div class="pricing-num mono">01.</div>
+            <div class="pricing-info">
+              <h3 class="pricing-name" data-i18n="price4-name">BASIC CODE DEBUGGING</h3>
+              <p class="pricing-desc" data-i18n-html="price4-desc">Fixing logic errors and environment setups. <i>Valid student ID required.</i></p>
+            </div>
+            <div class="pricing-price mono" data-i18n="price4-price">[ START: $10 ]</div>
+          </div>
+          <div class="pricing-line">
+            <div class="pricing-num mono">02.</div>
+            <div class="pricing-info">
+              <h3 class="pricing-name" data-i18n="price5-name">COURSEWORK & TEMPLATES</h3>
+              <p class="pricing-desc" data-i18n-html="price5-desc">LaTeX generators, standard algorithms, and UI templates. <i>Valid student ID required.</i></p>
+            </div>
+            <div class="pricing-price mono" data-i18n="price5-price">[ START: $30 ]</div>
+          </div>
+          <div class="pricing-line">
+            <div class="pricing-num mono">03.</div>
+            <div class="pricing-info">
+              <h3 class="pricing-name" data-i18n="price6-name">FINAL PROJECT ASSISTANCE</h3>
+              <p class="pricing-desc" data-i18n-html="price6-desc">Architecture design, core logic implementation, and code review. <i>Valid student ID required.</i></p>
+            </div>
+            <div class="pricing-price mono" data-i18n="price6-price">[ START: $80 ]</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 · PHILOSOPHY -->
+    <section class="chapter philosophy" id="philosophy">
+      <span class="idx mono">08 / 13 — PHILOSOPHY</span>
+      <h2 class="outline-text" id="outline">LESS, BUT BETTER.</h2>
+    </section>
+
+    <!-- 09 · COORDINATES -->
+    <section class="chapter radar-chapter" id="radar">
+      <span class="idx mono">09 / 13 — LOCATION</span>
+      <h2 class="outline-text" id="outline">We Are Here.</h2>
+      <div class="radar">
+        <i class="radar-ring"></i>
+        <i class="radar-ring radar-ring--2"></i>
+        <i class="radar-sweep"></i>
+        <i class="radar-dot"></i>
+      </div>
+      <p class="mono coords">03.1425° N &nbsp;/&nbsp; 101.6842° E</p>
+    </section>
+
+    <!-- 10 · PROCESS -->
+    <section class="chapter process" id="process">
+      <span class="idx mono">10 / 13 — PROCESS</span>
+      <h2 class="section-title" data-flip data-i18n="process-title">FOUR STEPS, NO DRAMA.</h2>
+      <svg class="process-line" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true">
+        <path id="process-path" d="M0,60 H1000" />
+      </svg>
+      <div class="steps">
+        <div class="step"><span class="mono">01</span><h3 data-i18n="step1">Scope</h3><p data-i18n="step1d">A short call, a written spec, a fixed price.</p></div>
+        <div class="step"><span class="mono">02</span><h3 data-i18n="step2">Build</h3><p data-i18n="step2d">Weekly builds you can run yourself.</p></div>
+        <div class="step"><span class="mono">03</span><h3 data-i18n="step3">Review</h3><p data-i18n="step3d">Two revision rounds, tested on real data.</p></div>
+        <div class="step"><span class="mono">04</span><h3 data-i18n="step4">Ship</h3><p data-i18n="step4d">Source code, docs and 30 days of support.</p></div>
+      </div>
+    </section>
+
+    <!-- 11 · STATUS -->
+    <section class="chapter status" id="status">
+      <span class="idx mono">11 / 13 — STATUS</span>
+      <div class="status-row">
+        <i class="dot"></i>
+        <h2 class="section-title" data-flip data-i18n="status-title">OPEN FOR WHAT'S NEXT</h2>
+      </div>
+      <p class="mono clock" id="clock">--:--:-- UTC+8</p>
+    </section>
+
+    <!-- 12 · QUOTE -->
+    <section class="chapter quote" id="quote">
+      <span class="idx mono">12 / 13 — NOTE</span>
+      <blockquote data-split data-i18n="quote">
+        We are not here to follow the shape of tomorrow.
+        We are here to give it a shape that never existed.
+        Every line of code is a decision.
+        Every system is a possibility made real.
+        And every limit is simply a question
+        waiting for someone bold enough to answer.
+      </blockquote>
+      <div class="note-orbit" aria-hidden="true">
+        <div class="note-orbit__ring"></div>
+        <div class="note-orbit__core"></div>
+      </div>
+
+      <p class="note-signature mono">
+        BUILT WITH INTENTION — DEFINED BY POSSIBILITY.
+      </p>
+    </section>
+
+    <!-- 13 · CONTACT -->
+    <section class="chapter contact" id="contact">
+      <span class="idx mono">13 / 13 — CONTACT</span>
+      <h2 class="contact-title" data-split data-i18n="contact-title">LET'S BUILD.</h2>
+
+      <div class="contact-grid">
+        <a class="contact-link" href="mailto:qixuansean@gmail.com">qixuansean@gmail.com</a>
+        <a class="contact-link" href="https://wa.me/601127276281" target="_blank" rel="noopener">+60 11-2727 6281</a>
+        <a class="contact-link" href="https://github.com/qixuansean" target="_blank" rel="noopener">github.com/qixuansean</a>
+      </div>
+
+      <div class="signature" aria-hidden="true">
+        <svg class="signature-svg" viewBox="0 0 340 130" focusable="false">
+          <path d="M 18 85
+                   C 22 50, 48 35, 68 55
+                   C 82 68, 78 90, 58 88
+                   C 48 87, 52 70, 72 65
+                   C 95 58, 105 72, 125 68
+                   C 145 64, 148 48, 168 52
+                   C 188 56, 185 78, 205 74
+                   C 225 70, 235 52, 255 55
+                   C 275 58, 280 75, 265 82
+                   C 255 86, 270 90, 295 78"/>
+        </svg>
+      </div>
+
+      <footer class="footer mono">
+        <span data-i18n="footer">DESIGNED &amp; BUILT WITH STRICT LOGIC — 2026</span>
+        <button id="to-top" class="mono" data-i18n="footer-top">BACK TO TOP ↑</button>
+      </footer>
+    </section>
+
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="script.js" defer></script>
+</body>
+</html>

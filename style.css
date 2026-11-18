@@ -1,0 +1,1776 @@
+/* ==========================================================================
+   SEAN QIXUAN — MONOLITH 4.0
+   High-contrast editorial layout. GPU-friendly motion only.
+   ========================================================================== */
+
+:root {
+  --bg: #ffffff;
+  --fg: #0a0a0a;
+  --muted: #8a8a8a;
+  --line: rgba(10, 10, 10, 0.12);
+  --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --accent: #7195C8;
+  --accent-soft: rgba(113, 149, 200, 0.14);
+  --accent-line: rgba(113, 149, 200, 0.42);
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* 全局隐藏默认鼠标，包含所有滚动条部件 */
+html, body, *,
+::-webkit-scrollbar,
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-thumb {
+  cursor: none !important;
+}
+
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  line-height: 1.4;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, p, blockquote { margin: 0; }
+a { color: inherit; }
+
+.mono {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- decorative background ---------- */
+
+.grid-lines {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.grid-lines i {
+  display: block;
+  width: 1px;
+  height: 100%;
+  background: var(--line);
+  opacity: 0.55;
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.progress {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--fg);
+  transform: scaleX(0);
+  transform-origin: left center;
+  z-index: 60;
+  will-change: transform;
+}
+
+/* ---------- capsule navigation ---------- */
+
+.nav {
+  position: fixed;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.capsule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  background: var(--bg);
+  border: 1px solid var(--fg);
+  border-radius: 999px;
+}
+
+.node {
+  width: 30px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--fg);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease, color 0.25s ease;
+}
+
+.node:hover { background: var(--fg); color: var(--bg); }
+
+.node.is-active {
+  width: 46px;
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.sep { width: 1px; height: 16px; background: var(--line); }
+
+.lang {
+  border: 0;
+  background: none;
+  color: var(--fg);
+  cursor: pointer;
+  padding: 4px 2px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.lang:hover { opacity: 0.6; }
+
+/* ---------- chapters ---------- */
+
+main { position: relative; z-index: 2; }
+
+.chapter {
+  position: relative;
+  min-height: 100vh;
+  padding: clamp(72px, 8vw, 120px) clamp(20px, 7vw, 110px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 1px solid var(--line);
+}
+
+.idx {
+  position: absolute;
+  top: clamp(22px, 3.5vw, 44px);
+  left: clamp(20px, 7vw, 110px);
+  color: var(--muted);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+}
+
+.chapter:hover .idx {
+  color: var(--fg);
+  transform: translateX(6px);
+}
+
+.idx::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-top: 8px;
+  background: currentColor;
+  opacity: 0.5;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+}
+
+.idx.is-in::after { transform: scaleX(1); }
+
+.chapter-head { max-width: 900px; }
+
+.section-title {
+  font-size: clamp(2.2rem, 7vw, 6.4rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin: 18px 0 22px;
+  text-transform: uppercase;
+}
+
+.lede {
+  max-width: 46ch;
+  font-size: clamp(0.95rem, 1.35vw, 1.15rem);
+  color: #3a3a3a;
+  line-height: 1.65;
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  justify-content: space-between;
+  padding-top: clamp(80px, 10vh, 130px);
+  padding-bottom: clamp(48px, 7vh, 90px);
+}
+
+.hero-top span:last-child {
+  opacity: 0.6;
+  transition: opacity 0.5s ease;
+}
+
+.hero:hover .hero-top span:last-child {
+  opacity: 1;
+}
+
+.hero-bottom { 
+  align-items: flex-end;
+  /* Hover uses `translate`; GSAP owns `transform` for the scroll fade. */
+  transition: translate 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero:hover .hero-bottom {
+  translate: 0 -2px;
+}
+
+.hint .arrow {
+  display: inline-block;
+  animation: bob 1.8s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* Shutter-flip title */
+
+.morph {
+  display: flex;
+  width: 100%;
+  height: clamp(74px, 13vw, 210px);
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+}
+
+.morph:empty::before {
+  content: attr(data-front);
+  display: block;
+  font-size: clamp(2.2rem, 10.6vw, 11rem);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  white-space: nowrap;
+}
+
+.slice {
+  position: relative;
+  flex: 1 1 0;
+  height: 100%;
+  overflow: hidden;
+  perspective: 900px;
+  will-change: transform;
+}
+
+.face {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: clamp(2.2rem, 10.6vw, 11rem);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  white-space: nowrap;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.face--front {
+  z-index: 1;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.face--back {
+  z-index: 2;
+  transform: rotateX(-90deg);
+  transform-origin: 50% 0%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  font-size: clamp(1.6rem, 7.4vw, 8rem);
+  background: var(--fg);
+  color: var(--bg);
+  /* Hidden until its slat actually starts to open. A face sitting at
+     exactly -90deg still projects a razor-thin black band above the
+     name under perspective, which reads as a printing glitch. */
+  opacity: 0;
+}
+
+/* ---------- statement ---------- */
+
+.statement-chapter { justify-content: center; }
+
+.statement {
+  font-size: clamp(1.9rem, 5.6vw, 5.2rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  max-width: 20ch;
+}
+
+/* word mask */
+.statement .w,
+.contact-title .w,
+.quote blockquote .w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  clip-path: inset(-10% 0 -10% 0);
+}
+
+.statement .w > i,
+.contact-title .w > i,
+.quote blockquote .w > i {
+  display: inline-block;
+  font-style: normal;
+  transform: translate3d(0, 0, 0);
+}
+
+/* ---------- bento / students ---------- */
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: clamp(36px, 5vw, 70px);
+}
+
+.tile {
+  grid-column: span 2;
+  background: var(--bg);
+  border: 1px solid var(--fg);
+  padding: clamp(22px, 2.4vw, 38px);
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* The hover lift uses `translate`, so `transform` stays free for GSAP. */
+  transition: background 0.35s ease, color 0.35s ease,
+    translate 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tile--wide { grid-column: span 2; }
+
+.tile--dark {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.tile-num { color: var(--muted); }
+
+.tile h3 {
+  font-size: clamp(1.15rem, 1.7vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.tile p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: inherit;
+  opacity: 0.72;
+  max-width: 40ch;
+}
+
+.tile:hover { background: #f2f2f2; translate: 0 -3px; }
+.tile--dark:hover { background: #171717; }
+
+/* Wipe class sits on the tile too: keep the hover transition alive.
+   GSAP owns `transform` (the scroll scrub), so the hover lift uses the
+   independent `translate` property to avoid fighting it. */
+.tile.rv-wipe {
+  transition: clip-path 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.35s ease, color 0.35s ease,
+    translate 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- stack marquee ---------- */
+
+.stack-chapter { overflow: hidden; justify-content: center; gap: 3px; }
+
+.marquee {
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: clamp(10px, 1.4vw, 20px) 0;
+  width: 100%;
+}
+
+.marquee-track {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: clamp(2rem, 7.5vw, 6.5rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  will-change: transform;
+  animation: slide 26s linear infinite;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.marquee--reverse .marquee-track {
+  animation-direction: reverse;
+  animation-duration: 32s;
+}
+
+@keyframes slide {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* ---------- archive (horizontal) ---------- */
+
+.archive {
+  padding: 0;
+  overflow: hidden;
+  justify-content: flex-start;
+}
+
+.archive-head {
+  position: absolute;
+  top: clamp(22px, 3.5vw, 44px);
+  left: clamp(20px, 5vw, 60px);
+  color: var(--muted);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.archive-progress {
+  display: block;
+  width: clamp(90px, 12vw, 150px);
+  height: 1px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.archive-progress i {
+  display: block;
+  height: 100%;
+  background: var(--fg);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.archive-viewport { height: 100vh; display: flex; align-items: stretch; }
+
+.archive-track {
+  display: flex;
+  height: 100vh;
+  will-change: transform;
+}
+
+.panel {
+  flex: 0 0 auto;
+  width: min(84vw, 820px);
+  padding: clamp(70px, 9vh, 130px) clamp(24px, 4vw, 60px) clamp(40px, 6vh, 70px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  border-right: 1px solid var(--line);
+}
+
+.panel-num { color: var(--muted); }
+
+.panel-visual {
+  height: clamp(180px, 34vh, 340px);
+  width: auto; /* 宽度随高度等比例缩放，不强制拉宽 */
+  max-width: 100%; /* 防止图片过宽超出屏幕 */
+  object-fit: contain; /* 确保图片按原始比例完整显示，绝不变形 */
+  margin-bottom: 8px;
+  transform-origin: center;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+.panel:hover .panel-visual { transform: scale(1.02); }
+
+.panel h3 {
+  font-size: clamp(1.7rem, 3.6vw, 3.1rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.panel:hover h3 {
+  transform: translateX(10px);
+}
+
+.panel-desc {
+  max-width: 42ch;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #4a4a4a;
+  transition: color 0.4s ease;
+}
+
+.panel:hover .panel-desc {
+  color: var(--fg);
+}
+
+.panel--cta { justify-content: center; gap: 26px; }
+
+.outline {
+  -webkit-text-stroke: 1px var(--fg);
+  color: transparent;
+}
+
+.link-arrow {
+  text-decoration: none;
+  border-bottom: 1px solid var(--fg);
+  padding-bottom: 4px;
+  align-self: flex-start;
+  transition: opacity 0.2s ease;
+}
+
+.link-arrow:hover { opacity: 0.55; }
+
+/* ---------- philosophy ---------- */
+
+.philosophy { justify-content: center; }
+
+.outline-text {
+  font-size: clamp(2.4rem, 11vw, 11rem);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.92;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--fg);
+}
+
+/* ---------- radar ---------- */
+
+.radar-chapter { align-items: center; justify-content: center; gap: 44px; }
+
+.radar {
+  position: relative;
+  width: clamp(200px, 34vw, 340px);
+  aspect-ratio: 1;
+  border: 1px solid var(--fg);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.radar-ring {
+  position: absolute;
+  inset: 22%;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
+.radar-ring--2 { inset: 40%; }
+
+.radar-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(10, 10, 10, 0.22), transparent 28%);
+  animation: spin 5.5s linear infinite;
+  will-change: transform;
+}
+
+.radar-dot {
+  position: absolute;
+  top: 32%;
+  left: 62%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fg);
+  will-change: transform, opacity;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes blip {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.25; transform: scale(0.7); }
+}
+
+.coords {
+  color: var(--muted);
+  font-size: clamp(0.9rem, 1.6vw, 1.2rem);
+  letter-spacing: 0.12em;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+}
+
+.radar-chapter:hover .coords {
+  transform: translateY(-2px);
+  color: var(--fg);
+}
+
+/* ---------- process ---------- */
+
+.process { gap: 4px; }
+
+.process-line {
+  width: 100%;
+  height: 90px;
+  margin: clamp(10px, 3vw, 34px) 0;
+  overflow: visible;
+}
+
+.process-line path {
+  stroke: var(--fg);
+  stroke-width: 1;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(18px, 3vw, 46px);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid transparent;
+  /* GSAP owns `transform` for the scroll scrub, so the hover lift uses
+     the independent `translate` property. */
+  transition: translate 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease, background 0.35s ease, color 0.35s ease;
+}
+.step:hover {
+  translate: 0 -4px;
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+}
+.step:hover span,
+.step:hover p {
+  color: inherit;
+  opacity: 0.9;
+}
+.step span { color: var(--muted); }
+.step h3 { font-size: clamp(1rem, 1.5vw, 1.3rem); font-weight: 800; letter-spacing: -0.01em; }
+.step p { font-size: 0.88rem; line-height: 1.55; color: #4a4a4a; max-width: 26ch; }
+
+/* ---------- status ---------- */
+
+/* The clock parks 60px to the right before its entrance fires; clip that
+   off-canvas offset so it never widens the document on narrow screens. */
+.status { gap: 26px; overflow-x: clip; }
+
+.status-row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--fg);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(10, 10, 10, 0.35); }
+  50% { box-shadow: 0 0 0 12px rgba(10, 10, 10, 0); }
+}
+
+.clock { color: var(--muted); }
+
+/* ---------- quote ---------- */
+
+.quote { justify-content: center; }
+
+.quote blockquote {
+  font-size: clamp(1.5rem, 4.4vw, 4rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  max-width: 24ch;
+}
+
+/* ---------- contact ---------- */
+
+.contact { justify-content: space-between; gap: 40px; }
+
+.contact-title {
+  font-size: clamp(2.6rem, 12vw, 12rem);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  border-top: 1px solid var(--fg);
+  padding-top: 24px;
+}
+
+.contact-link {
+  text-decoration: none;
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  font-weight: 600;
+  border-bottom: 1px solid var(--line);
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: border-color 0.3s ease, padding-left 0.3s ease, color 0.3s ease;
+}
+
+.contact-link::after {
+  content: "↗";
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  opacity: 0.4;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.contact-link:hover {
+  border-color: var(--fg);
+  padding-left: 8px;
+  background: rgba(10, 10, 10, 0.03);
+}
+
+.contact-link:hover::after {
+  opacity: 1;
+  transform: translate(4px, -4px);
+}
+
+/* Signature, drawn in as the contact rows finish landing. */
+.signature {
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.signature-svg {
+  width: clamp(130px, 17vw, 230px);
+  height: auto;
+  overflow: visible;
+  color: var(--fg);
+}
+
+.signature-svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 700px) {
+  .signature { justify-content: flex-start; }
+  .signature-svg { width: 140px; }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+
+.footer button {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+}
+
+.footer button:hover { color: var(--fg); }
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 900px) {
+  .grid-lines { padding: 0 20%; }
+  .grid-lines i:nth-child(even) { display: none; }
+
+  /* Keep section labels clear of the fixed capsule navigation. */
+  .chapter:not(.hero):not(.archive) { padding-top: 104px; }
+  .idx { top: 70px; }
+  .archive-head { top: 70px; }
+
+  .bento { grid-template-columns: 1fr; }
+  .tile { grid-column: span 1; min-height: 0; }
+  .steps { grid-template-columns: 1fr 1fr; }
+  .process-line { display: none; }
+  .panel { width: 88vw; }
+  .hero-top span:last-child { display: none; }
+
+  /* Horizontal gallery becomes a swipeable strip on touch layouts */
+  .archive-viewport {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+  .archive-track { width: max-content; }
+  .panel { scroll-snap-align: start; }
+}
+
+@media (max-width: 560px) {
+  .capsule { gap: 6px; padding: 7px 12px; }
+  .node { width: 26px; height: 16px; }
+  .node.is-active { width: 38px; }
+  .steps { grid-template-columns: 1fr; }
+  .morph { height: clamp(56px, 16vw, 90px); }
+
+  /* Shorter cascades on small screens: everything lands sooner. */
+  .w > i { transition-delay: calc(var(--i, 0) * 16ms); }
+  .fl > i { transition-delay: calc(var(--i, 0) * 26ms); }
+  .rv-wipe { transition-delay: calc(var(--i, 0) * 26ms); }
+  .rv-scale, .rv-slide { transition-delay: calc(var(--i, 0) * 24ms); }
+}
+
+/* ---------- reveal system (varied, GPU friendly) ---------- */
+
+.w > i {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 22ms);
+}
+
+.is-in .w > i,
+[data-split].is-in .w > i {
+  clip-path: inset(-15% 0 -15% 0);
+}
+
+/* Venetian-blind flip for section titles */
+.fl {
+  display: inline-block;
+  perspective: 800px;
+  transform-style: preserve-3d;
+}
+
+.fl > i {
+  display: inline-block;
+  font-style: normal;
+  transform-origin: 50% 100%;
+  transform: rotateX(-88deg);
+  opacity: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  transition-delay: calc(var(--i, 0) * 40ms);
+}
+
+.is-in .fl > i,
+[data-flip].is-in .fl > i {
+  transform: rotateX(0deg);
+  opacity: 1;
+}
+
+.rv-wipe {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 45ms);
+}
+
+.rv-wipe.is-in { clip-path: inset(0 0 0 0); }
+
+.rv-scale {
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.45s ease, transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 50ms);
+}
+
+.rv-scale.is-in { opacity: 1; transform: none; }
+
+.rv-slide {
+  opacity: 0;
+  transform: translateX(-14px);
+  transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 50ms);
+}
+
+.rv-slide.is-in { opacity: 1; transform: none; }
+
+.rv-bar {
+  transform: scaleX(0);
+  transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rv-bar.is-in { transform: scaleX(0.8); }
+
+/* Circular iris: new reveal shape for round objects */
+.rv-iris {
+  clip-path: circle(0% at 50% 50%);
+  opacity: 0;
+  transform: scale(0.94);
+  transition: clip-path 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.5s ease, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rv-iris.is-in {
+  clip-path: circle(75% at 50% 50%);
+  opacity: 1;
+  transform: none;
+}
+
+/* Scroll-sync override: when the reader has already passed an element,
+   jump it straight to the finished state instead of animating late. */
+.rv-now,
+.rv-now .w > i,
+.rv-now .fl > i,
+.rv-now::after {
+  transition: none !important;
+  transition-delay: 0s !important;
+  animation-delay: 0s !important;
+}
+
+/* Interactive Statement Word Hover */
+.statement .w > i,
+.quote blockquote .w > i {
+  transition: clip-path 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s ease;
+}
+
+.statement .w:hover > i,
+.quote blockquote .w:hover > i {
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* Radar Pulse Wave Rings */
+.radar-ring--2 {
+  animation: radar-pulse 3.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@keyframes radar-pulse {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  50% { opacity: 0.4; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+/* Custom Interactive Cursor */
+@media (pointer: fine) {
+  body { cursor: default; }
+  .cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+  }
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--fg);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.3s ease,
+                border-color 0.3s ease,
+                opacity 0.3s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring.is-hover {
+    width: 64px;
+    height: 64px;
+    background: var(--fg);
+    border-color: transparent;
+  }
+  .cursor-ring.is-clickable {
+    width: 48px;
+    height: 48px;
+    border-color: var(--fg);
+  }
+}
+
+@media (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
+}
+
+/* Motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .marquee-track,
+  .radar-sweep,
+  .radar-dot,
+  .dot,
+  .hint .arrow { animation: none !important; }
+  /* No universal `transition-duration` override here: it makes
+     ScrollTrigger's pinned start measurements wrong (the archive pin
+     lands 1080px early), which breaks nav jumps for these users. */
+}
+
+/* ---------- 07 · pricing rate card ---------- */
+
+.pricing-container {
+  margin-top: clamp(30px, 5vw, 60px);
+  display: flex;
+  flex-direction: column;
+}
+.pricing-category {
+  font-size: 0.85rem;
+  font-weight: 700;
+  opacity: 0.5;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+.pricing-table {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1rem;
+}
+.pricing-line {
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr) auto;
+  column-gap: 2rem;
+  align-items: center;
+  padding: 2rem 0;
+  border-top: 1px solid var(--line);
+  transition: padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+}
+.pricing-line:hover {
+  padding-left: 1rem;
+  background: rgba(10, 10, 10, 0.02);
+}
+.pricing-num {
+  font-size: 1rem;
+  font-weight: 700;
+  opacity: 0.4;
+}
+.pricing-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pricing-name {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.pricing-desc {
+  font-size: 0.85rem;
+  color: #555;
+  max-width: 50ch;
+  line-height: 1.5;
+}
+.pricing-desc i {
+  opacity: 0.5;
+  display: block;
+  margin-top: 4px;
+}
+/* Faux-oblique CJK looks broken; keep the note upright in Chinese. */
+html[lang^="zh"] .pricing-desc i {
+  font-style: normal;
+}
+.pricing-price {
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--fg);
+}
+.accent-text {
+  color: var(--fg);
+  font-weight: 700;
+}
+
+/* Narrow screens: give the copy the full measure and drop the fixed
+   figure under it, instead of squeezing the description into ~80px. */
+@media (max-width: 700px) {
+  .pricing-line {
+    grid-template-columns: 24px minmax(0, 1fr);
+    column-gap: 12px;
+    row-gap: 8px;
+    padding: 1.5rem 0;
+    align-items: start;
+  }
+  .pricing-num {
+    font-size: 0.8rem;
+    padding-top: 3px;
+  }
+  .pricing-name { font-size: 1.05rem; }
+  .pricing-price {
+    grid-column: 2;
+    font-size: 0.9rem;
+  }
+}
+
+/* =========================================================
+   08 · PHILOSOPHY — inverted stage + assembled line figure
+   ========================================================= */
+
+/* The flying lines are clipped to the pinned chapter, not the page. */
+#philosophy { overflow: hidden; }
+
+.line-assembly-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.fly-line {
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+/* Invert the *palette*, not the paper. GSAP tweens body's background
+   and colour on the scroll position; this class flips every token and
+   border so type, rules and the capsule stay legible on black. The
+   background itself is deliberately not set here: an !important rule
+   would snap and fight the scrubbed tween. */
+body.dark-mode-active {
+  --bg: #0a0a0a;
+  --fg: #ffffff;
+  --line: rgba(255, 255, 255, 0.14);
+  --muted: #9a9a9a;
+  color: #ffffff;
+}
+body.dark-mode-active .pricing-desc,
+body.dark-mode-active .lede { color: #a0a0a0; }
+body.dark-mode-active .idx,
+body.dark-mode-active .pricing-category,
+body.dark-mode-active .pricing-num { color: #8a8a8a; }
+body.dark-mode-active .pricing-price,
+body.dark-mode-active .accent-text { color: #ffffff; }
+body.dark-mode-active .pricing-line:hover { background: rgba(255, 255, 255, 0.05); }
+
+.capsule { transition: background-color 0.5s ease, border-color 0.5s ease; }
+.sep { transition: background-color 0.5s ease; }
+
+
+
+/* =========================================================
+   UPGRADED FX — 06 / 09 / 11 / 12
+   ========================================================= */
+
+/* ---------- 06 DEPTH: chromatic split + scanline glitch ---------- */
+#depth { overflow: hidden; }
+
+#depth .statement {
+  position: relative;
+  will-change: transform, filter, letter-spacing, opacity;
+}
+
+/* RGB chromatic aberration ghost layers */
+#depth .statement::before,
+#depth .statement::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+#depth .statement::before {
+  color: var(--accent);
+  mix-blend-mode: multiply;
+  transform: translate3d(-4px, 0, 0);
+}
+
+#depth .statement::after {
+  color: #d96b6b;
+  mix-blend-mode: multiply;
+  transform: translate3d(4px, 0, 0);
+}
+
+#depth.is-charging .statement::before,
+#depth.is-charging .statement::after { opacity: 0.55; }
+
+/* Horizontal scanline sweep */
+#depth .depth-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  top: 50%;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  will-change: transform, opacity;
+}
+
+/* Depth particles (created by JS) */
+#depth .depth-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* ---------- 09 RADAR: targeting reticle + ping ripples ---------- */
+#radar { overflow: hidden; }
+
+/* Crosshair reticle overlay */
+.radar-reticle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.radar-reticle::before,
+.radar-reticle::after {
+  content: "";
+  position: absolute;
+  background: var(--accent);
+  opacity: 0.55;
+}
+
+.radar-reticle::before {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform: translateX(-50%);
+}
+
+.radar-reticle::after {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+/* Expanding ping rings (created by JS) */
+.radar-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* Lock-on corner brackets */
+.radar-lock {
+  position: absolute;
+  inset: -8px;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 5;
+}
+
+.radar-lock span {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--accent);
+}
+
+.radar-lock span:nth-child(1) { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.radar-lock span:nth-child(2) { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+.radar-lock span:nth-child(3) { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+.radar-lock span:nth-child(4) { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+/* ---------- 11 STATUS: lock-in glitch + flicker ---------- */
+#status .section-title {
+  position: relative;
+  will-change: transform, clip-path, opacity;
+}
+
+#status .status-glitch {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: var(--accent);
+  opacity: 0;
+  clip-path: inset(0 0 100% 0);
+  will-change: transform, opacity, clip-path;
+}
+
+/* Vertical scanning beam */
+#status .status-beam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(180deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  will-change: transform, opacity;
+}
+
+/* ---------- 12 QUOTE: 3D word rotation + light streak ---------- */
+#quote { overflow: hidden; perspective: 1000px; }
+
+#quote blockquote .w {
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+#quote blockquote .w > i {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Light streak that sweeps across the quote */
+#quote .quote-streak {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(113, 149, 200, 0.12),
+    transparent
+  );
+  pointer-events: none;
+  opacity: 0;
+  z-index: 3;
+  will-change: transform, opacity;
+  filter: blur(8px);
+}
+
+/* Word echo layers for the quote */
+#quote .quote-echo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  color: var(--accent);
+  clip-path: inset(0 0 100% 0);
+  will-change: transform, opacity, clip-path;
+  z-index: 0;
+}
+
+/* =========================================================
+   MICRO-DELIGHT LAYER — 转场衔接 + 微交互
+   ========================================================= */
+
+/* ---------- 通用：章节之间的"接缝" ---------- */
+
+/* 章节入场时的顶部细线，像胶片换帧 */
+.chapter::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--fg);
+  transform: scaleX(0);
+  transform-origin: left center;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.chapter.is-entering::before {
+  animation: seam-draw 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes seam-draw {
+  to { transform: scaleX(1); }
+}
+
+/* 章节编号的"跑马灯"小箭头 */
+.idx::before {
+  content: "▸ ";
+  display: inline-block;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chapter:hover .idx::before {
+  opacity: 0.6;
+  transform: translateX(0);
+}
+
+/* ---------- 01 HERO：光标跟随的呼吸光晕 ---------- */
+
+.hero-glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(113, 149, 200, 0.18),
+    transparent 65%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  filter: blur(20px);
+  z-index: 0;
+  will-change: transform, opacity;
+  transition: opacity 0.6s ease;
+}
+
+.hero:hover .hero-glow { opacity: 1; }
+
+/* Hero 底部提示的呼吸点 */
+.hint::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-right: 8px;
+  vertical-align: middle;
+  animation: hint-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ---------- 02 / 06 MANIFESTO 类：文字逐字"呼吸" ---------- */
+
+.statement .w > i {
+  transition: clip-path 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.3s ease;
+}
+
+.statement .w:hover > i {
+  color: var(--accent);
+}
+
+/* ---------- 03 STUDENT：tile 角落的编号旋转 ---------- */
+
+.tile-num {
+  display: inline-block;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.3s ease;
+}
+
+.tile:hover .tile-num {
+  transform: rotate(-8deg) scale(1.15);
+  color: var(--accent);
+}
+
+/* tile 悬停时的描边"呼吸" */
+.tile {
+  position: relative;
+}
+
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, inset 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tile:hover::after {
+  opacity: 0.5;
+  inset: -4px;
+}
+
+/* ---------- 04 STACK：marquee 悬停减速 ---------- */
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ---------- 05 ARCHIVE：panel 悬停的"卡牌抬起" ---------- */
+
+.panel {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.panel:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 60px -30px rgba(10, 10, 10, 0.35);
+}
+
+/* panel 编号在悬停时"亮起" */
+.panel:hover .panel-num {
+  color: var(--accent);
+  transition: color 0.3s ease;
+}
+
+/* ---------- 07 PRICING：价格行悬停的 accent 竖条 ---------- */
+
+.pricing-line {
+  position: relative;
+}
+
+.pricing-line::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 2px;
+  height: 0;
+  background: var(--accent);
+  transform: translateY(-50%);
+  transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pricing-line:hover::before {
+  height: 60%;
+}
+
+/* ---------- 08 PHILOSOPHY：outline 文字的"呼吸描边" ---------- */
+
+.outline-text {
+  transition: -webkit-text-stroke 0.4s ease, letter-spacing 0.6s ease;
+}
+
+.philosophy:hover .outline-text {
+  -webkit-text-stroke: 1.5px var(--accent);
+  letter-spacing: -0.045em;
+}
+
+/* ---------- 10 PROCESS：step 编号的"跑动" ---------- */
+
+.step span {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.3s ease;
+}
+
+.step:hover span {
+  transform: translateX(6px);
+  color: var(--accent);
+}
+
+/* step 之间的连接点在悬停时亮起 */
+.step:hover {
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+/* ---------- 13 CONTACT：链接的"箭头追逐" ---------- */
+
+.contact-link::after {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease,
+              color 0.3s ease;
+}
+
+.contact-link:hover::after {
+  color: var(--accent);
+  animation: arrow-nudge 0.6s ease-in-out;
+}
+
+@keyframes arrow-nudge {
+  0%, 100% { transform: translate(4px, -4px); }
+  50% { transform: translate(8px, -8px); }
+}
+
+/* ---------- 全局：光标在 accent 元素上的颜色反馈 ---------- */
+
+.cursor-ring.is-hover {
+  background: var(--accent);
+  border-color: transparent;
+  mix-blend-mode: normal;
+}
+
+/* ---------- 转场：章节离开时的"淡出下坠" ---------- */
+
+.chapter.is-leaving .section-title,
+.chapter.is-leaving .statement {
+  opacity: 0.4;
+  transform: translateY(-10px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- 顶栏 capsule 的滚动反馈 ---------- */
+
+.nav.is-scrolled .capsule {
+  box-shadow: 0 8px 30px -12px rgba(10, 10, 10, 0.25);
+  transform: translateY(-1px);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* =========================================================
+   NOTE — ETERNAL ORBIT
+   ========================================================= */
+
+#quote {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Circular orbit */
+.note-orbit {
+  position: absolute;
+  width: clamp(180px, 30vw, 360px);
+  aspect-ratio: 1;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: -1;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+}
+
+/* 7px rotating circular border */
+.note-orbit__ring {
+  position: absolute;
+  inset: 0;
+  border: 7px solid rgba(113, 149, 200, 0.16);
+  border-top-color: var(--accent);
+  border-right-color: rgba(113, 149, 200, 0.65);
+  border-radius: 50%;
+  animation: note-orbit-spin 12s linear infinite;
+  box-shadow:
+    0 0 18px rgba(113, 149, 200, 0.12),
+    inset 0 0 18px rgba(113, 149, 200, 0.06);
+}
+
+/* Inner atmospheric glow */
+.note-orbit__core {
+  width: 72%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(113, 149, 200, 0.13),
+    rgba(113, 149, 200, 0.025) 55%,
+    transparent 75%
+  );
+  animation: note-core-pulse 4s ease-in-out infinite;
+}
+
+@keyframes note-orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes note-core-pulse {
+  0%, 100% {
+    transform: scale(0.88);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+/* Note typography */
+#quote blockquote {
+  position: relative;
+  z-index: 2;
+  max-width: 19ch;
+  font-size: clamp(1.5rem, 4vw, 3.8rem);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.note-signature {
+  position: relative;
+  z-index: 2;
+  margin-top: 36px;
+  color: var(--accent);
+  opacity: 0.8;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .note-orbit {
+    width: 190px;
+    right: -45px;
+    top: 25%;
+    opacity: 0.55;
+  }
+
+  #quote blockquote {
+    max-width: 18ch;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .note-orbit__ring,
+  .note-orbit__core {
+    animation: none;
+  }
+}
+
+/* 确保滚动条背景透明，只有滑块显示你的 accent color */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent; /* 整体透明 */
+}
+
+/* 滚动条轨道：完全透明 */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 滚动条滑块（那粒拖动的东西）：使用 :root 里的颜色 */
+::-webkit-scrollbar-thumb {
+  background-color: var(--accent); /* 替换成你在 :root 里写的变量名 */
+  border-radius: 999px; /* 让滑块两端变成圆角，更好看 */
+  cursor: none !important; /* 防止鼠标碰到滑块时变回系统默认箭头 */
+}
+
+/* 鼠标悬停在滑块上时：保持颜色和隐藏系统鼠标 */
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accent-color);
+  cursor: none !important;
+}
+
+/* 兼容 Firefox 浏览器 */
+html {
+  scrollbar-color: var(--accent) transparent; /* 第一个是滑块颜色，第二个是透明轨道 */
+  scrollbar-width: thin;
+}

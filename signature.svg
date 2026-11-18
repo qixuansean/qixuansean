@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 130">
+  <style>
+    .sig { stroke: #1A1A1A; fill: none; }
+    @media (prefers-color-scheme: dark) {
+      .sig { stroke: #F5F5F0; }
+    }
+  </style>
+
+  <!-- Sean 签名 -->
+  <path class="sig"
+        d="M 18 85
+           C 22 50, 48 35, 68 55
+           C 82 68, 78 90, 58 88
+           C 48 87, 52 70, 72 65
+           C 95 58, 105 72, 125 68
+           C 145 64, 148 48, 168 52
+           C 188 56, 185 78, 205 74
+           C 225 70, 235 52, 255 55
+           C 275 58, 280 75, 265 82
+           C 255 86, 270 90, 295 78"
+        stroke-width="4.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+</svg>
