@@ -89,8 +89,8 @@
       step3d: "Two revision rounds, tested on real data.",
       step4: "Ship",
       step4d: "Source code, docs and 30 days of support.",
-      "status-title": "Transparent freelance software engineering at 80% of agency rates—delivering production-ready code with zero middleman markup.",
-      quote: "Specializing in P2P network architecture, ClickHouse analytics, and backend performance audits for startups and researchers.",
+      "status-title": "OPEN FOR FREELANCE & TUTORING",
+      quote: "Custom software & code tutoring. Full source code included.",
       "contact-title": "LET'S BUILD.",
       footer: "DESIGNED & BUILT WITH STRICT LOGIC — 2026",
       "footer-top": "BACK TO TOP ↑"
@@ -154,8 +154,8 @@
       step3d: "两轮修改，并在真实数据上测试。",
       step4: "交付",
       step4d: "源代码、文档，以及 30 天维护。",
-      "status-title": "专为大学生打造的编程作业辅助、IEEE/ACM LaTeX 论文排版模板与代码报错排查服务。 —— 代码辅导",
-      quote: "透明合理的独立工程师报价（仅为市场价 80%），无中介差价，按周交付可运行源码。 —— 接单开发。",
+      "status-title": "开放软件外包与代码辅导",
+      quote: "1.  	• 专注全栈开发与架构设计，交付即享完整源码。",
       "contact-title": "开始构建。",
       footer: "严谨逻辑设计与构建 — 2026",
       "footer-top": "回到顶部 ↑"
