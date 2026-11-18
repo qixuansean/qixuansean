@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ngqixuan.com
+Sitemap: https://www.ngqixuan.com/sitemap.xml
 
