@@ -28,7 +28,7 @@
     en: {
       "hero-role": "INDEPENDENT DEVELOPER — MALAYSIA / UTC+8",
       "hero-hint": "SCROLL",
-      statement: "Precision is not a feature. It is the baseline.",
+      statement: "An independent full-stack developer in Malaysia building high-concurrency Rust systems, Python automation, and Next.js web applications.",
       "student-title": "FOR STUDENTS",
       "student-lede":
         "Tools that remove the boring parts of university, so the work you keep is the work that matters.",
@@ -44,7 +44,7 @@
       "stu4-d":
         "Same engineering standard, 80% of market rate. Student bundles start at $40 with source code included.",
       "archive-cta": "START A PROJECT →",
-      depth: "Depth over Decoration, Ideas over Imitation, and Creation without Limits..",
+      depth: "From custom web scraping scripts and ETL data pipelines to scalable AI agents, engineered cleanly with full source code ownership.",
       "pricing-title": "80% OF MARKET",
       "pricing-lede":
         "No agency markup, no account managers. You pay for engineering time, and you keep the source code.",
@@ -89,8 +89,8 @@
       step3d: "Two revision rounds, tested on real data.",
       step4: "Ship",
       step4d: "Source code, docs and 30 days of support.",
-      "status-title": "OPEN FOR WHAT'S NEXT",
-      quote: "The best way to predict the future is to invent it.",
+      "status-title": "Transparent freelance software engineering at 80% of agency rates—delivering production-ready code with zero middleman markup.",
+      quote: "Specializing in P2P network architecture, ClickHouse analytics, and backend performance audits for startups and researchers.",
       "contact-title": "LET'S BUILD.",
       footer: "DESIGNED & BUILT WITH STRICT LOGIC — 2026",
       "footer-top": "BACK TO TOP ↑"
@@ -98,7 +98,7 @@
     zh: {
       "hero-role": "独立开发者 — 马来西亚 / UTC+8",
       "hero-hint": "向下滚动",
-      statement: "精密不是功能，而是底线。",
+      statement: "马来西亚独立全栈开发者，专注于高性能 Rust 系统架构、Python 自动化脚本与 Next.js 网页开发。 —— 全栈开发",
       "student-title": "大学生专栏",
       "student-lede": "把大学里枯燥的部分交给我，你只需要保留真正重要的研究。",
       "stu1-t": "学术工具箱",
@@ -110,7 +110,7 @@
       "stu4-t": "学生价格",
       "stu4-d": "同样的工程标准，市场价的 80%。学生套餐 $40 起，包含源代码。",
       "archive-cta": "开始一个项目 →",
-      depth: "以深度超越浮华，以创造突破常规",
+      depth: "提供定制网页数据采集、ETL 数据管道搭建与 AI 智能体开发，交付即享完整源代码所有权。 —— 软件外包",
       "pricing-title": "市场价的 80%",
       "pricing-lede": "没有中间商加价，没有客户经理。你只为工程时间付费，源码归你。",
       "pricing-biz-tag": "[ 商业接单 / FOR BUSINESS ]",
@@ -154,8 +154,8 @@
       step3d: "两轮修改，并在真实数据上测试。",
       step4: "交付",
       step4d: "源代码、文档，以及 30 天维护。",
-      "status-title": "2026 期间可接单",
-      quote: "预测未来的最好方式，就是把它创造出来。",
+      "status-title": "专为大学生打造的编程作业辅助、IEEE/ACM LaTeX 论文排版模板与代码报错排查服务。 —— 代码辅导",
+      quote: "透明合理的独立工程师报价（仅为市场价 80%），无中介差价，按周交付可运行源码。 —— 接单开发。",
       "contact-title": "开始构建。",
       footer: "严谨逻辑设计与构建 — 2026",
       "footer-top": "回到顶部 ↑"
