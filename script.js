@@ -28,7 +28,7 @@
     en: {
       "hero-role": "INDEPENDENT DEVELOPER — MALAYSIA / UTC+8",
       "hero-hint": "SCROLL",
-      statement: "An independent full-stack developer in Malaysia building high-concurrency Rust systems, Python automation, and Next.js web applications.",
+      statement: "Full-Stack & Systems Engineer.",
       "student-title": "FOR STUDENTS",
       "student-lede":
         "Tools that remove the boring parts of university, so the work you keep is the work that matters.",
@@ -44,7 +44,7 @@
       "stu4-d":
         "Same engineering standard, 80% of market rate. Student bundles start at $40 with source code included.",
       "archive-cta": "START A PROJECT →",
-      depth: "From custom web scraping scripts and ETL data pipelines to scalable AI agents, engineered cleanly with full source code ownership.",
+      depth: "Custom Software & Data Pipelines.",
       "pricing-title": "80% OF MARKET",
       "pricing-lede":
         "No agency markup, no account managers. You pay for engineering time, and you keep the source code.",
@@ -98,7 +98,7 @@
     zh: {
       "hero-role": "独立开发者 — 马来西亚 / UTC+8",
       "hero-hint": "向下滚动",
-      statement: "马来西亚独立全栈开发者，专注于高性能 Rust 系统架构、Python 自动化脚本与 Next.js 网页开发。 —— 全栈开发",
+      statement: "全栈开发与系统架构师。",
       "student-title": "大学生专栏",
       "student-lede": "把大学里枯燥的部分交给我，你只需要保留真正重要的研究。",
       "stu1-t": "学术工具箱",
@@ -110,7 +110,7 @@
       "stu4-t": "学生价格",
       "stu4-d": "同样的工程标准，市场价的 80%。学生套餐 $40 起，包含源代码。",
       "archive-cta": "开始一个项目 →",
-      depth: "提供定制网页数据采集、ETL 数据管道搭建与 AI 智能体开发，交付即享完整源代码所有权。 —— 软件外包",
+      depth: "定制软件外包与数据管道。",
       "pricing-title": "市场价的 80%",
       "pricing-lede": "没有中间商加价，没有客户经理。你只为工程时间付费，源码归你。",
       "pricing-biz-tag": "[ 商业接单 / FOR BUSINESS ]",
